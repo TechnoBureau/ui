@@ -4,6 +4,7 @@ namespace TechnoBureau\UIPreset;
 
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Ui\Presets\Preset;
+use Illuminate\Console\Command;
 
 class UIPreset extends Preset
 {
@@ -35,10 +36,12 @@ class UIPreset extends Preset
     protected $migrations = [];
 
     protected $command;
+    protected $option;
 
     public function __construct(Command $command)
     {
         $this->command = $command;
+        $this->option = $this->command->options();
     }
     /**
      * Install the preset.
@@ -66,7 +69,9 @@ class UIPreset extends Preset
             'bootstrap' => '^5.0.2',
             'jquery' => '^3.6',
             'popper.js' => '^1.16.1',
+            '@popperjs/core' => '^2.9.2',
             'sass' => '^1.32.11',
+            'resolve-url-loader' => '^4.0.0',
             'sass-loader' => '^11.0.1',
             'bootstrap-select' => '^1.14.0-beta2',
             'tb-admin' => '^1.0.0',
@@ -112,7 +117,7 @@ class UIPreset extends Preset
 
         $this->ensureDirectoriesExist();
         $this->exportViews();
-        if (! $this->command->option('views')) {
+        if ( ! isset($this->option['views']) ) {
             $this->exportBackend();
         }
         
@@ -125,7 +130,7 @@ class UIPreset extends Preset
     protected function exportViews()
     {
         foreach ($this->views as $key => $value) {
-            if (file_exists($view = $this->getViewPath($value)) && ! $this->command->option('force')) {
+            if (file_exists($view = $this->getViewPath($value)) && ! isset($this->option['force']) ) {
                 if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
                 }
@@ -142,7 +147,7 @@ class UIPreset extends Preset
     {
         
         foreach ($this->controllers as $value) {
-            if (file_exists($controller = app_path($value)) && ! $this->command->option('force')) {
+            if (file_exists($controller = app_path($value)) && ! isset($this->option['force']) ) {
                 if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
                 }
@@ -153,12 +158,12 @@ class UIPreset extends Preset
 
         file_put_contents(
             base_path('routes/web.php'),
-            file_get_contents(__DIR__.'/../Auth/stubs/routes.stub'),
+            file_get_contents(__DIR__.'/../Auth/stubs/routes.php'),
             FILE_APPEND
         );
 
         foreach ($this->migrations as $value) {
-            if (file_exists($migration = base_path($value)) && ! $this->command->option('force')) {
+            if (file_exists($migration = base_path($value)) && ! isset($this->option['force']) ) {
                 if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
                     continue;
                 }

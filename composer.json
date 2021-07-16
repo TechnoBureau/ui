@@ -30,7 +30,7 @@
         
         "laravel": {
             "providers": [
-                "TechnoBureau\\UiPresetServiceProvider"
+                "TechnoBureau\\UIPreset\\UIPresetServiceProvider"
             ]
         }
     }

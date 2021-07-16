@@ -5,7 +5,6 @@ namespace TechnoBureau\UIPreset;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Ui\UiCommand;
 
-
 class UIPresetServiceProvider extends ServiceProvider
 {
     
@@ -17,6 +16,9 @@ class UIPresetServiceProvider extends ServiceProvider
     public function boot()
     {
         UiCommand::macro('technobureau', function (UiCommand $command) {
+            foreach ($command->option('option') as  $value)
+                $command->addOption($value);
+            
             $UiPreset = new UIPreset($command);
             $UiPreset->install();
 
