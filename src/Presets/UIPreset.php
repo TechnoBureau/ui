@@ -127,6 +127,10 @@ class UIPreset extends Preset
             FILE_APPEND
         );
 
+        (new Filesystem)->ensureDirectoryExists(app_path('Models'));
+        
+        copy(__DIR__.'/../../Auth/stubs/User.php', app_path('Models/User.php'));
+
         $filesystem = new Filesystem();
 
         collect($filesystem->allFiles(__DIR__.'/../../database'))
