@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 use TechnoBureau\UI\Models\Authorizable;
 
 
-class UserController extends Controller
+class UserController extends TechnoBureauController
 {
     /**
      * Create a new controller instance.

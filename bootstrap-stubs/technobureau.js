@@ -24,8 +24,8 @@ require('./bootstrap-select');
     }
 })(jQuery);
 $(document).on('show.bs.modal','#confirmation-modal', function (event){
-    $(this).find('#name').text($(event.relatedTarget).data('name'))
-    $('#confirmationDelForm').attr('action', $(event.relatedTarget).data('attr'));
+    $(this).find('#name').text($(event.relatedTarget).data('bs-name'))
+    $('#confirmationDelForm').attr('action', $(event.relatedTarget).data('bs-attr'));
     $(this).scrollTop(0);
     
 })

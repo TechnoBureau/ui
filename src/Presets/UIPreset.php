@@ -110,7 +110,7 @@ class UIPreset extends Preset
         $filesystem = new Filesystem();
         collect($filesystem->allFiles(__DIR__.'/../../Auth/bootstrap-stubs'))
             ->each(function (SplFileInfo $file) use ($filesystem) {
-                if($file->getrelativePath()!='')
+                //if($file->getrelativePath()!='') //Avoid skipping welcome blade overwritten.
                     $filesystem->copy(
                         $file->getPathname(),
                         base_path('resources/views/'.$file->getrelativePathname())
@@ -128,7 +128,7 @@ class UIPreset extends Preset
         );
 
         (new Filesystem)->ensureDirectoryExists(app_path('Models'));
-        
+
         copy(__DIR__.'/../../Auth/stubs/User.php', app_path('Models/User.php'));
 
         $filesystem = new Filesystem();

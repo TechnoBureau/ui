@@ -9,7 +9,7 @@
         </a>
 
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-        <li><a class="dropdown-item" href="#!">Settings</a></li>
+        <li><a class="dropdown-item" href="{{ route('home') }}">Dashboard</a></li>
         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
         <li><hr class="dropdown-divider"></hr></li>
         <li><a class="dropdown-item" href="{{ route('logout') }}"

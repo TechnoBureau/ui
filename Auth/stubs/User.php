@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use TechnoBureau\UI\Models\User as Authenticatable;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
