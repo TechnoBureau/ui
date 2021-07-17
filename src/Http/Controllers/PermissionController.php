@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TechnoBureau\UI\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Group;
-use App\Permission;
-use App\User;
+use TechnoBureau\UI\Models\Permission;
+use TechnoBureau\UI\Models\User;
+use TechnoBureau\UI\Models\Group;
+//use Junges\ACL\Traits\UsersTrait;
 use Illuminate\Support\Str;
-use App\Authorizable;
+use TechnoBureau\UI\Models\Authorizable;
 
-class GroupController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -22,8 +23,8 @@ class GroupController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->middleware('auth');
-        $this->conf = new Group();
+        //$this->middleware('auth');
+        $this->conf = new Permission();
         $this->view["casts"]=$this->conf::$html_casts;
         $this->view["list"]=$this->conf::$table_list;
         $this->view["disabled"]=$this->conf::$html_disabled;
@@ -32,15 +33,14 @@ class GroupController extends Controller
         $this->view["nav"] = "config-nav";
     }
 
-    public function getData()
+    private function getData() 
     {
         $keyword = request('search');
         return $this->conf::select('id','name','slug')
-                ->when($keyword,function ($query) use ($keyword) {
-                    $query->orWhere('name', 'LIKE', '%' . $keyword . '%')
-                    ->orWhere('slug', 'LIKE', '%' . $keyword . '%');
-                })->orderBy('id','DESC')->paginate(10);
-        
+                    ->when($keyword,function ($query) use ($keyword) {
+                        $query->orWhere('name', 'LIKE', '%' . $keyword . '%')
+                        ->orWhere('slug', 'LIKE', '%' . $keyword . '%');
+                    })->orderBy('id','DESC')->paginate(10);
     }
     /**
      * Display a listing of the resource.
@@ -78,9 +78,9 @@ class GroupController extends Controller
         $input = $request->all();
 
         $conf = $this->conf::create($input);
-        if(isset($input['permissions'])) $conf->syncPermissions($input['permissions']);
-        if(isset($input['users'])) $conf->assignUser($input['users']);
-        return $this->formatResponse($request,$conf);
+        if(isset($input['users'])) $conf->users()->sync($input['users']);
+        if(isset($input['groups'])) $conf->groups()->sync($conf->convertToGroupIds($input['groups']));
+        return $this->formatResponse($request);
     }
     
     /**
@@ -121,10 +121,12 @@ class GroupController extends Controller
         ]);
     
         $input = $request->all();
+        
         $conf = $this->conf::find($id);
-        if(isset($input['permissions'])) $conf->syncPermissions($input['permissions']);
-        if(isset($input['users'])) $conf->assignUser($input['users']);
+        if(isset($input['users'])) $conf->users()->sync($input['users']);
+        if(isset($input['groups'])) $conf->groups()->sync($conf->convertToGroupIds($input['groups']));
         $conf->update($input);
+
         return $this->formatResponse($request,$conf);        
     }
     
@@ -141,7 +143,7 @@ class GroupController extends Controller
                
     }
 
-    public function formatResponse(Request $request,$conf = NULL ,$message=NULL,$_cData = array(),$_fData = array())
+    public function formatResponse(Request $request,$conf = NULL,$message=NULL)
     {
         $Func_Type = debug_backtrace()[1]['function'];
 
@@ -158,20 +160,21 @@ class GroupController extends Controller
         $var = array('ConfList','view');
         if(isset($conf))
         {
-            $_cData["permissions"] = $conf->permissions()->pluck('slug')->toArray();
-            $_fData["permissions"] = Permission::pluck('name','slug')->WhereNull('deleted_at')->toArray();
             $_cData["users"] = $conf->users()->pluck('id')->toArray();
             $_fData["users"] = User::pluck('name','id')->toArray();
+            $_cData["groups"] = $conf->groups()->pluck('slug')->toArray();
+            $_fData["groups"] = Group::pluck('name','slug')->WhereNull('deleted_at')->toArray();
             $result = compact($var,'conf','_cData','_fData');
         }
         else if($Func_Type == "create")
         {
-            $_fData["permissions"] = Permission::pluck('name','slug')->WhereNull('deleted_at')->toArray();
             $_fData["users"] = User::pluck('name','id')->toArray();
+            $_fData["groups"] = Group::pluck('name','slug')->WhereNull('deleted_at')->toArray();
             $result = compact($var,'_fData');
         }
         else
             $result = compact($var);
+
         $massage = array(
             "store" => "created",
             "update" => "updated",

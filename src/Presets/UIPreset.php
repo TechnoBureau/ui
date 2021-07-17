@@ -1,10 +1,11 @@
 <?php
 
-namespace TechnoBureau\UIPreset;
+namespace TechnoBureau\UI\Presets;
 
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Ui\Presets\Preset;
 use Illuminate\Console\Command;
+//use Symfony\Component\Finder\SplFileInfo;
 
 class UIPreset extends Preset
 {
@@ -32,8 +33,6 @@ class UIPreset extends Preset
         'includes/search.blade.php' => 'includes/search.blade.php',
         'includes/sw.blade.php' => 'includes/sw.blade.php',        
     ];
-    protected $controllers = [];
-    protected $migrations = [];
 
     protected $command;
     protected $option;
@@ -75,6 +74,7 @@ class UIPreset extends Preset
             'sass-loader' => '^11.0.1',
             'bootstrap-select' => '^1.14.0-beta2',
             'tb-admin' => '^1.0.0',
+            'webpack' => '5.45.1', //5.45.0 have bug with js query token error
         ] + $packages;
     }
 
@@ -117,6 +117,7 @@ class UIPreset extends Preset
 
         $this->ensureDirectoriesExist();
         $this->exportViews();
+
         if ( ! isset($this->option['views']) ) {
             $this->exportBackend();
         }
@@ -129,51 +130,50 @@ class UIPreset extends Preset
      */
     protected function exportViews()
     {
-        foreach ($this->views as $key => $value) {
-            if (file_exists($view = $this->getViewPath($value)) && ! isset($this->option['force']) ) {
-                if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
-                    continue;
-                }
-            }
+        $filesystem = new Filesystem();
+        //$cmd = $this->command;
+        //$frce = $this->option['force'];
+        collect($filesystem->allFiles(__DIR__.'/../Auth/bootstrap-stubs'))
+            ->each(function (SplFileInfo $file) use ($filesystem) {
+                if($file->getrelativePath()!='')
+                    $filesystem->copy(
+                        $file->getPathname(),
+                        base_path($file->getrelativePathname())
+                    );
+            });
+        // foreach ($this->views as $key => $value) {
+        //     if (file_exists($view = $this->getViewPath($value)) && ! isset($this->option['force']) ) {
+        //         if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
+        //             continue;
+        //         }
+        //     }
 
-            copy(
-                __DIR__.'/../Auth/bootstrap-stubs/'.$key,
-                $view
-            );
-        }
+        //     copy(
+        //         __DIR__.'/../Auth/bootstrap-stubs/'.$key,
+        //         $view
+        //     );
+        // }
     }
 
     protected function exportBackend()
     {
         
-        foreach ($this->controllers as $value) {
-            if (file_exists($controller = app_path($value)) && ! isset($this->option['force']) ) {
-                if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
-                    continue;
-                }
-            }
-            
-            file_put_contents($controller, $this->compileControllerStub($value));
-        }
-
         file_put_contents(
             base_path('routes/web.php'),
             file_get_contents(__DIR__.'/../Auth/stubs/routes.php'),
             FILE_APPEND
         );
 
-        foreach ($this->migrations as $value) {
-            if (file_exists($migration = base_path($value)) && ! isset($this->option['force']) ) {
-                if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
-                    continue;
-                }
-            }
+        $filesystem = new Filesystem();
 
-            copy(
-                __DIR__.'/../Auth/stubs/migrations/'.$value,
-                $migration
-            );
-        }
+        collect($filesystem->allFiles(__DIR__.'/../database'))
+            ->each(function (SplFileInfo $file) use ($filesystem) {
+                if($file->getrelativePath()!='')
+                    $filesystem->copy(
+                        $file->getPathname(),
+                        base_path($file->getrelativePathname())
+                    );
+            });
     }
 
     /**

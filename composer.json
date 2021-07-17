@@ -1,6 +1,6 @@
 {
     "name": "technobureau/ui",
-    "description": "TechnoBureau UI utilities and presets.",
+    "description": "TechnoBureau UI views and complete authentication system.",
     "keywords": ["TechnoBureau", "ui"],
     "license": "MIT",
     "authors": [
@@ -16,11 +16,13 @@
         "illuminate/support": "^8.42",
         "illuminate/validation": "^8.42",
         "laravel/sanctum": "^2.11",
-        "laravel/ui": "^3.0"
+        "laravel/ui": "^3.0",
+        "mateusjunges/laravel-acl": "^2.6",
+        "artesaos/seotools": "^0.20.1"
     },
     "autoload": {
         "psr-4": {
-            "TechnoBureau\\UIPreset\\": "src/"
+            "TechnoBureau\\UI\\": "src/"
         }
     },
     "config": {
@@ -30,7 +32,9 @@
         
         "laravel": {
             "providers": [
-                "TechnoBureau\\UIPreset\\UIPresetServiceProvider"
+                "TechnoBureau\\UI\\Providers\\UIPresetServiceProvider",
+                "TechnoBureau\\UI\\Providers\\TechnoBureauServiceProvider",
+                "TechnoBureau\\UI\\Providers\\TechnoBureauAuthServiceProvider"
             ]
         }
     }

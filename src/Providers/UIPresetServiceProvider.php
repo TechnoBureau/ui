@@ -1,9 +1,10 @@
 <?php
 
-namespace TechnoBureau\UIPreset;
+namespace TechnoBureau\UI\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Ui\UiCommand;
+use TechnoBureau\UI\Presets\UIPreset;
 
 class UIPresetServiceProvider extends ServiceProvider
 {
