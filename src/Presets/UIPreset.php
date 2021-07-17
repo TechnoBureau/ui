@@ -5,34 +5,11 @@ namespace TechnoBureau\UI\Presets;
 use Illuminate\Filesystem\Filesystem;
 use Laravel\Ui\Presets\Preset;
 use Illuminate\Console\Command;
-//use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 
 class UIPreset extends Preset
 {
-    /**
-     * The views that need to be exported.
-     *
-     * @var array
-     */
-    protected $views = [
-        'home.blade.php' => 'home.blade.php',
-        'welcome.blade.php' => 'welcome.blade.php',
-        'conf-management.blade.php' => 'conf-management.blade.php',
-        'layouts/app.blade.php' => 'layouts/app.blade.php',
-        'includes/auth.blade.php' => 'includes/auth.blade.php',
-        'includes/config-nav.blade.php' => 'includes/config-nav.blade.php',
-        'includes/confirmation-modal.blade.php' => 'includes/confirmation-modal.blade.php',
-        'includes/container.blade.php' => 'includes/container.blade.php',
-        'includes/footer.blade.php' => 'includes/footer.blade.php',
-        'includes/footer-scripts.blade.php' => 'includes/footer-scripts.blade.php',
-        'includes/header.blade.php' => 'includes/header.blade.php',
-        'includes/left_nav.blade.php' => 'includes/left_nav.blade.php',
-        'includes/marketing-container.blade.php' => 'includes/marketing-container.blade.php',
-        'includes/message.blade.php' => 'includes/message.blade.php',
-        'includes/nav.blade.php' => 'includes/nav.blade.php',
-        'includes/search.blade.php' => 'includes/search.blade.php',
-        'includes/sw.blade.php' => 'includes/sw.blade.php',        
-    ];
+        
 
     protected $command;
     protected $option;
@@ -85,7 +62,7 @@ class UIPreset extends Preset
      */
     protected static function updateWebpackConfiguration()
     {
-        copy(__DIR__.'/../bootstrap-stubs/webpack.mix.js', base_path('webpack.mix.js'));
+        copy(__DIR__.'/../../bootstrap-stubs/webpack.mix.js', base_path('webpack.mix.js'));
     }
 
     /**
@@ -97,7 +74,7 @@ class UIPreset extends Preset
     {
         (new Filesystem)->ensureDirectoryExists(resource_path('scss'));        
 
-        copy(__DIR__.'/../bootstrap-stubs/technobureau.scss', resource_path('scss/technobureau.scss'));
+        copy(__DIR__.'/../../bootstrap-stubs/technobureau.scss', resource_path('scss/technobureau.scss'));
         
     }
 
@@ -108,9 +85,9 @@ class UIPreset extends Preset
      */
     protected static function updateBootstrapping()
     {
-        copy(__DIR__.'/../bootstrap-stubs/bootstrap.js', resource_path('js/bootstrap.js'));
-        copy(__DIR__.'/../bootstrap-stubs/bootstrap-select.js', resource_path('js/bootstrap-select.js'));
-        copy(__DIR__.'/../bootstrap-stubs/technobureau.js', resource_path('js/technobureau.js'));
+        copy(__DIR__.'/../../bootstrap-stubs/bootstrap.js', resource_path('js/bootstrap.js'));
+        copy(__DIR__.'/../../bootstrap-stubs/bootstrap-select.js', resource_path('js/bootstrap-select.js'));
+        copy(__DIR__.'/../../bootstrap-stubs/technobureau.js', resource_path('js/technobureau.js'));
     }
     public function installAuth()
     {
@@ -131,28 +108,14 @@ class UIPreset extends Preset
     protected function exportViews()
     {
         $filesystem = new Filesystem();
-        //$cmd = $this->command;
-        //$frce = $this->option['force'];
-        collect($filesystem->allFiles(__DIR__.'/../Auth/bootstrap-stubs'))
+        collect($filesystem->allFiles(__DIR__.'/../../Auth/bootstrap-stubs'))
             ->each(function (SplFileInfo $file) use ($filesystem) {
                 if($file->getrelativePath()!='')
                     $filesystem->copy(
                         $file->getPathname(),
-                        base_path($file->getrelativePathname())
+                        base_path('resources/views/'.$file->getrelativePathname())
                     );
             });
-        // foreach ($this->views as $key => $value) {
-        //     if (file_exists($view = $this->getViewPath($value)) && ! isset($this->option['force']) ) {
-        //         if (! $this->command->confirm("The [{$value}] view already exists. Do you want to replace it?")) {
-        //             continue;
-        //         }
-        //     }
-
-        //     copy(
-        //         __DIR__.'/../Auth/bootstrap-stubs/'.$key,
-        //         $view
-        //     );
-        // }
     }
 
     protected function exportBackend()
@@ -160,18 +123,18 @@ class UIPreset extends Preset
         
         file_put_contents(
             base_path('routes/web.php'),
-            file_get_contents(__DIR__.'/../Auth/stubs/routes.php'),
+            file_get_contents(__DIR__.'/../../Auth/stubs/routes.php'),
             FILE_APPEND
         );
 
         $filesystem = new Filesystem();
 
-        collect($filesystem->allFiles(__DIR__.'/../database'))
+        collect($filesystem->allFiles(__DIR__.'/../../database'))
             ->each(function (SplFileInfo $file) use ($filesystem) {
                 if($file->getrelativePath()!='')
                     $filesystem->copy(
                         $file->getPathname(),
-                        base_path($file->getrelativePathname())
+                        base_path('database/'.$file->getrelativePathname())
                     );
             });
     }
@@ -186,7 +149,7 @@ class UIPreset extends Preset
         return str_replace(
             '{{namespace}}',
             $this->command->laravel->getNamespace(),
-            file_get_contents(__DIR__.'/../Auth/stubs/'.$file)
+            file_get_contents(__DIR__.'/../../Auth/stubs/'.$file)
         );
     }
 

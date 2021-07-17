@@ -10,7 +10,7 @@ use TechnoBureau\UI\Models\Group;
 use Illuminate\Support\Str;
 use TechnoBureau\UI\Models\Authorizable;
 
-class PermissionController extends Controller
+class PermissionController extends TechnoBureauController
 {
     /**
      * Create a new controller instance.
