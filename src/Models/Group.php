@@ -5,11 +5,11 @@ namespace TechnoBureau\UI\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Junges\ACL\Traits\GroupsTrait;
-
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Group extends Model
 {
-    use HasFactory,GroupsTrait;
+    use HasFactory,GroupsTrait,Cachable;
     protected $fillable = [
         'slug', 'name','description',
     ];

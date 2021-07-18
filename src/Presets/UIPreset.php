@@ -139,6 +139,11 @@ class UIPreset extends Preset
             file_get_contents(__DIR__.'/../../Auth/stubs/routes.php'),
             FILE_APPEND
         );
+        file_put_contents(
+            base_path('routes/api.php'),
+            file_get_contents(__DIR__.'/../../Auth/stubs/api.php'),
+            FILE_APPEND
+        );
 
         (new Filesystem)->ensureDirectoryExists(app_path('Models'));
 

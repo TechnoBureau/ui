@@ -18,7 +18,8 @@
         "laravel/sanctum": "^2.11",
         "laravel/ui": "^3.0",
         "mateusjunges/laravel-acl": "^2.6",
-        "artesaos/seotools": "^0.20.1"
+        "artesaos/seotools": "^0.20.1",
+        "genealabs/laravel-model-caching": "^0.11.3"
     },
     "autoload": {
         "psr-4": {

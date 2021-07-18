@@ -5,10 +5,11 @@ namespace TechnoBureau\UI\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Junges\ACL\Traits\PermissionsTrait;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 
 class Permission extends Model
 {
-   use HasFactory,PermissionsTrait;
+   use HasFactory,PermissionsTrait,Cachable;
    
    protected $fillable = [
       'slug', 'name','description',
