@@ -5,8 +5,8 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="manifest" type="application/manifest+json" href="/manifest.json">
+    <title>{{ config('app.name', 'TechnoBureau') }}</title>
+    <link rel="manifest" type="application/manifest+json" href="/manifest.webmanifest">
     {!! SEO::generate(true) !!}
     <!-- Styles -->
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->

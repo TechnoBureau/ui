@@ -1,11 +1,10 @@
 {
     "lang": "English",
     "dir": "ltr",
-    "name": "Name of Application",
-    "short_name": "Short Name of Application",
-    "description": "Description of Application",
-    "scope": "/",
-    "icons": [{"src":"/favicon.ico","sizes":"16x16"}],
+    "name": "TechnoBureau",
+    "short_name": "TB",
+    "description": "A Technology Intelligence",
+    "scope": "/",    
     "icons": [
         {
         "src": "/favicon.ico",
