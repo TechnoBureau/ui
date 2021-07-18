@@ -13,12 +13,14 @@
         {
         "src": "/img/apple-touch-icon-192x192.png",
         "type": "image/png",
-        "sizes": "192x192"
+        "sizes": "192x192",
+        "purpose": "any maskable"
         },
         {
         "src": "/img/apple-touch-icon-512x512.png",
         "type": "image/png",
-        "sizes": "512x512"
+        "sizes": "512x512",
+        "purpose": "any maskable"
         }
     ],
     "theme_color": "#590C12",
