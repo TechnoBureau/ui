@@ -2,10 +2,10 @@
 <html lang="en">
 @include("includes.header")
 
-<body class="sb-nav-fixed">
+<body class="sb-nav-fixed @if(!isset($view['nav'])) sb-sidenav-toggled @endif">
     @include("includes.nav")
     <div id="layoutSidenav">
-        @if(!isset($view['nav'])) @include("includes.left_nav") @endif
+        @include("includes.left_nav")
         <div id="layoutSidenav_content">
             @include('includes.message')
             <main class="h-100">
