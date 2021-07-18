@@ -28,6 +28,17 @@
     "config": {
         "sort-packages": true
     },
+    "scripts": {
+        "post-install-cmd": [
+            "@initialize"
+        ],
+        "initialize": [
+            "php artisan ui bootstrap --auth",
+            "php artisan ui technobureau --auth",
+            "php artisan vendor:publish --provider='Junges\\ACL\\ACLServiceProvider' --tag='acl-config' ",
+            "npm install && npm run prod"
+        ]
+    },
     "extra": {
         
         "laravel": {

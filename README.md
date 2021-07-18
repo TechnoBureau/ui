@@ -1,10 +1,10 @@
-# Laravel UI
+# TechnoBureau UI
 
 <a href="https://packagist.org/packages/TechnoBureau/ui"><img src="https://img.shields.io/packagist/dt/TechnoBureau/ui" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/TechnoBureau/ui"><img src="https://img.shields.io/packagist/v/TechnoBureau/ui" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/TechnoBureau/ui"><img src="https://img.shields.io/packagist/l/TechnoBureau/ui" alt="License"></a>
 
-## This legacy package is a very simple authentication scaffolding built on the Bootstrap CSS framework. While it continues to work with the latest version of Laravel, you should consider using [Laravel Breeze](https://github.com/laravel/breeze) for new projects. Or, for something more robust, consider [Laravel Jetstream](https://github.com/laravel/jetstream).
+## This legacy package is a very simple authentication scaffolding built on the Bootstrap CSS framework. While it continues to work with the latest version of Laravel.
 
 ## Introduction
 
@@ -28,16 +28,25 @@ The Bootstrap and Vue scaffolding provided by TechnoBureau is located in the `te
 composer require technobureau/ui
 ```
 
-Once the `technobureau/ui` package has been installed, you may install the frontend scaffolding using the `TBui` Artisan command:
+Before executing this ui command execute default laravel/ui command to generate basic authentication scaffolding.
+```bash
+php artisan ui bootstrap --auth
+```
+
+Once the `technobureau/ui` package has been installed, you may install the frontend scaffolding using the `ui` Artisan command:
 
 ```bash
 // Generate basic scaffolding...
-php artisan TBui bootstrap
-php artisan TBui vue
+php artisan ui technobureau
 
 // Generate login / registration scaffolding...
-php artisan TBui bootstrap --auth
-php artisan TBui vue --auth
+php artisan ui technobureau --auth
+
+```
+
+User and authentication are all depended on `mateusjunges/laravel-acl` package, so execute below command to publish configuration file related to that package.
+```bash
+php artisan vendor:publish --provider="Junges\ACL\ACLServiceProvider" --tag="acl-config"
 ```
 
 #### CSS
@@ -58,13 +67,13 @@ Before compiling your CSS, install your project's frontend dependencies using th
 npm install
 ```
 
-Once the dependencies have been installed using `npm install`, you can compile your SASS files to plain CSS using [Laravel Mix](https://laravel.com/docs/mix#working-with-stylesheets). The `npm run dev` command will process the instructions in your `webpack.mix.js` file. Typically, your compiled CSS will be placed in the `public/css` directory:
+Once the dependencies have been installed using `npm install`, you can compile your SASS files to plain CSS using [Laravel Mix](https://laravel.com/docs/mix#working-with-stylesheets). The `npm run prod` command will process the instructions in your `webpack.mix.js` file. Typically, your compiled CSS will be placed in the `public/css` directory:
 
 ```bash
-npm run dev
+npm run prod
 ```
 
-The `webpack.mix.js` file included with Laravel's frontend scaffolding will compile the `resources/sass/app.scss` SASS file. This `app.scss` file imports a file of SASS variables and loads Bootstrap, which provides a good starting point for most applications. Feel free to customize the `app.scss` file however you wish or even use an entirely different pre-processor by [configuring Laravel Mix](https://laravel.com/docs/mix).
+The `webpack.mix.js` file included with Laravel's frontend scaffolding will compile the `resources/sass/technobureau.scss` SASS file. This `technobureau.scss` file imports a file of SASS variables and loads Bootstrap, which provides a good starting point for most applications. Feel free to customize the `technobureau.scss` file however you wish or even use an entirely different pre-processor by [configuring Laravel Mix](https://laravel.com/docs/mix).
 
 ### Writing JavaScript
 
@@ -76,70 +85,15 @@ npm install
 
 > By default, the Laravel `package.json` file includes a few packages such as `lodash` and `axios` to help you get started building your JavaScript application. Feel free to add or remove from the `package.json` file as needed for your own application.
 
-Once the packages are installed, you can use the `npm run dev` command to [compile your assets](https://laravel.com/docs/mix). Webpack is a module bundler for modern JavaScript applications. When you run the `npm run dev` command, Webpack will execute the instructions in your `webpack.mix.js` file:
+Once the packages are installed, you can use the `npm run prod` command to [compile your assets](https://laravel.com/docs/mix). Webpack is a module bundler for modern JavaScript applications. When you run the `npm run prod` command, Webpack will execute the instructions in your `webpack.mix.js` file:
 
 ```bash
-npm run dev
+npm run prod
 ```
 
-By default, the Laravel `webpack.mix.js` file compiles your SASS and the `resources/js/app.js` file. Within the `app.js` file you may register your Vue components or, if you prefer a different framework, configure your own JavaScript application. Your compiled JavaScript will typically be placed in the `public/js` directory.
+By default, the Laravel `webpack.mix.js` file compiles your SASS and the `resources/js/technobureau.js` file. Within the `technobureau.js` file you may register your Vue components or, if you prefer a different framework, configure your own JavaScript application. Your compiled JavaScript will typically be placed in the `public/js` directory.
 
-> The `app.js` file will load the `resources/js/bootstrap.js` file which bootstraps and configures Vue, Axios, jQuery, and all other JavaScript dependencies. If you have additional JavaScript dependencies to configure, you may do so in this file.
-
-#### Writing Vue Components
-
-When using the `laravel/ui` package to scaffold your frontend, an `ExampleComponent.vue` Vue component will be placed in the `resources/js/components` directory. The `ExampleComponent.vue` file is an example of a [single file Vue component](https://vuejs.org/guide/single-file-components) which defines its JavaScript and HTML template in the same file. Single file components provide a very convenient approach to building JavaScript driven applications. The example component is registered in your `app.js` file:
-
-```javascript
-Vue.component(
-    'example-component',
-    require('./components/ExampleComponent.vue').default
-);
-```
-
-To use the component in your application, you may drop it into one of your HTML templates. For example, after running the `php artisan ui vue --auth` Artisan command to scaffold your application's authentication and registration screens, you could drop the component into the `home.blade.php` Blade template:
-
-```blade
-@extends('layouts.app')
-
-@section('content')
-    <example-component></example-component>
-@endsection
-```
-
-> Remember, you should run the `npm run dev` command each time you change a Vue component. Or, you may run the `npm run watch` command to monitor and automatically recompile your components each time they are modified.
-
-If you are interested in learning more about writing Vue components, you should read the [Vue documentation](https://vuejs.org/guide/), which provides a thorough, easy-to-read overview of the entire Vue framework.
-
-
-### Adding Presets
-
-Presets are "macroable", which allows you to add additional methods to the `UiCommand` class at runtime. For example, the following code adds a `nextjs` method to the `TBUiCommand` class. Typically, you should declare preset macros in a [service provider](https://laravel.com/docs/providers):
-
-```php
-use TechnoBureau\Ui\TBUiCommand;
-
-TBUiCommand::macro('nextjs', function (UiCommand $command) {
-    // Scaffold your frontend...
-});
-```
-Then, you may call the new preset via the `TBui` command:
-
-```bash
-php artisan TBui nextjs
-```
-
-## Contributing
-
-Thank you for considering contributing to UI! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-Please review [our security policy](https://github.com/laravel/ui/security/policy) on how to report security vulnerabilities.
+> The `technobureau.js` file will load the `resources/js/bootstrap.js` file which bootstraps and configures Vue, Axios, jQuery, and all other JavaScript dependencies and `resources/js/bootstrap-select.js` for beautiful select drop down with search option. If you have additional JavaScript dependencies to configure, you may do so in this file.
 
 ## License
 
