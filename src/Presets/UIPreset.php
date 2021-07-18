@@ -116,6 +116,19 @@ class UIPreset extends Preset
                         base_path('resources/views/'.$file->getrelativePathname())
                     );
             });
+        
+        (new Filesystem)->ensureDirectoryExists(base_path('public/img'));
+        (new Filesystem)->ensureDirectoryExists(base_path('public/js'));
+        (new Filesystem)->ensureDirectoryExists(base_path('public/js/workbox'));
+        $filesystem = new Filesystem();
+        collect($filesystem->allFiles(__DIR__.'/../../public'))
+            ->each(function (SplFileInfo $file) use ($filesystem) {
+                //if($file->getrelativePath()!='') //Avoid skipping welcome blade overwritten.
+                    $filesystem->copy(
+                        $file->getPathname(),
+                        base_path('public/'.$file->getrelativePathname())
+                    );
+            });
     }
 
     protected function exportBackend()
