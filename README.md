@@ -44,9 +44,9 @@ php artisan ui technobureau --auth
 
 ```
 
-User and authentication are all depended on `mateusjunges/laravel-acl` package, so execute below command to publish configuration file related to that package.
+This package are depended on few vendor package, so execute below command to publish configuration file related to that package. Please make sure entered as 0 as input when publish command ask for provider or tag
 ```bash
-php artisan vendor:publish --provider="Junges\ACL\ACLServiceProvider" --tag="acl-config"
+php artisan vendor:publish
 ```
 
 #### CSS
