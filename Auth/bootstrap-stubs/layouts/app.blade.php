@@ -8,7 +8,8 @@
         @include("includes.left_nav")
         <div id="layoutSidenav_content">
             @include('includes.message')
-            <main class="h-100">
+	    <main class="h-100">
+		@include('includes.breadcrumbs')
                 @yield("content")
             </main>
             @include("includes.footer")
