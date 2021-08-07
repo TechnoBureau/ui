@@ -1,6 +1,7 @@
 <div class="container" id="breadcrumb-container">
-    <nav class="row pt-4" aria-label="breadcrumb">
+    <nav class="row pt-4" aria-label="breadcrumb">        
         <ol id="breadcrumb-left" class="breadcrumb float-start" itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            @if(count(Request::segments()) > 0)
             <li class="breadcrumb-item" itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
                 <a href="/" itemprop="item" title="Go to Home"><span itemprop="name">Home</span></a>
             </li>
@@ -13,6 +14,7 @@
                     @if (!$loop->last)</a>@endif
                 </li>
             @endforeach
+            @endif
         </ol>
     </nav>
 </div>
